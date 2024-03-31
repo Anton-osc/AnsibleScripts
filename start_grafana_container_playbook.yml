@@ -16,4 +16,5 @@
      image: grafana/grafana
      detach: yes
      network_mode: host
+     restart_policy: always
 
