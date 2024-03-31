@@ -1,0 +1,32 @@
+---
+- name: Install Node-Exporter for all groups
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Update apt
+    apt:
+     update_cache: yes    
+  - name: Install Node-Exporter
+    apt: name=prometheus-node-exporter state=present
+  - name: Start Node-Exporter
+    service: name=prometheus-node-exporter state=started enabled=yes
+
+
+- name: Install Prometheus for VMsP
+  hosts: VMsP
+  become: yes
+
+  tasks:
+  - name: Install Prometheus
+    apt: name=prometheus state=present
+  - name: Start Prometheus
+    service: name=prometheus state=started enabled=yes
+  - name: Copy Prometheus configuration file
+    copy: src=~/ansi/prometheus.yml dest=/etc/prometheus/prometheus.yml
+    notify: restart prometheus
+  handlers:
+  - name: restart prometheus
+    service: name=prometheus state=restarted
+
+

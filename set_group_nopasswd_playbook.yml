@@ -1,0 +1,32 @@
+---
+- name: Setting no password for group admins
+  hosts: all
+  become: yes
+  vars:
+    user_datails:
+      - { name: 'admin1', shell: '/bin/bash', groups: 'admins, sudo' }
+      - { name: 'user1', shell: '/bin/bash', groups: 'users' }
+
+  tasks:
+  - name: Create some users and groups
+    user:
+      name: '{{ item.name }}'
+      shell: '{{ item.shell }}'
+      groups: '{{ item.groups }}'
+      append: yes
+    with_items: '{{ user_datails }}'
+      
+  - name: Set no password for group
+    lineinfile:
+      path: /etc/sudoers
+      line: '%admins ALL=(ALL) NOPASSWD: ALL'
+      validate: 'visudo -cf %s'
+      state: present
+  
+
+
+    
+
+
+        
+    
