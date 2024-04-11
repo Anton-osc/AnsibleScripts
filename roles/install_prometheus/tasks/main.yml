@@ -1,0 +1,21 @@
+---
+# tasks file for install_prometheus
+- name: Update apt
+  apt:
+   update_cache: yes
+- name: Install Prometheus
+  apt: 
+   name: prometheus
+   state: present
+- name: Start Prometheus
+  service:
+   name: prometheus
+   state: started
+   enabled: yes
+- name: Copy Prometheus config file
+  copy: 
+   src: prometheus.yml
+   dest: "{{ destination_folder }}/prometheus.yml"
+  notify:
+   - Restart Prometheus
+   

@@ -1,0 +1,3 @@
+---
+# defaults file for install_prometheus
+destination_folder: /etc/prometheus

@@ -1,0 +1,15 @@
+---
+# tasks file for install_node-exporter
+
+- name: Update apt
+  apt:
+   update_cache: yes
+- name: Install Node-Exporter
+  apt:
+   name: prometheus-node-exporter
+   state: present
+- name: Start Node-Exporter
+  service:
+   name: prometheus-node-exporter
+   state: started
+   enabled: yes

@@ -1,0 +1,15 @@
+---
+# tasks file for start_grafana_indocker
+- name: Install python3-pip
+  apt:
+   name: pip
+- name: Install python docker module
+  pip:
+   name: docker
+- name: Start grafana container
+  docker_container:
+   name: mygrafana
+   image: grafana/grafana
+   detach: yes
+   network_mode: host
+   restart_policy: always
