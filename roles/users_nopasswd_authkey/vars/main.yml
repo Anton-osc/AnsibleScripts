@@ -1,0 +1,6 @@
+---
+# vars file for users_nopasswd_authkey
+user_details:
+   - { name: 'admin1', shell: '/bin/bash', groups: 'admins, sudo' }
+   - { name: 'user1', shell: '/bin/bash', groups: 'users' }
+

@@ -1,0 +1,7 @@
+---
+# defaults file for users_nopasswd_authkey
+dest_dir: '/home'
+path_sudoers_file: '/etc/sudoers'
+group_nopasswd: '%admins ALL=(ALL) NOPASSWD: ALL'
+group: 'admins'
+src_path: '~/spec_keys'
