@@ -1,0 +1,8 @@
+---
+# tasks file for install_pip_docker_module
+- name: Install python3-pip    
+  apt:
+    name: pip 
+- name: Install python docker module
+  pip:
+    name: docker 

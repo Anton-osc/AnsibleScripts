@@ -1,0 +1,33 @@
+---
+# tasks file for openvpn_generate_client_cert
+- name: Generate client certificate
+  docker_container:
+    name: client_cert
+    image: kylemanna/openvpn
+    volumes:
+     - "{{ OVPN_DATA }}:/etc/openvpn"
+    command: "easyrsa build-client-full {{ item.name }} nopass"
+  with_items: '{{ clientnames_details }}'
+- name: Retrieve configuration
+  docker_container:
+    name: openvpn_getclient
+    image: kylemanna/openvpn
+    volumes: 
+     - "{{ OVPN_DATA }}:/etc/openvpn"
+    command: "/bin/bash -c 'ovpn_getclient {{ item.name }} > {{ CONTAINER_DIR }}/{{ item.name }}.ovpn'"
+    detach: no
+    interactive: yes
+  with_items: '{{ clientnames_details }}'
+- name: Delete container client_cert
+  docker_container:
+    name: client_cert
+    state: absent
+- name: Delete container openvpn_getclient
+  docker_container:
+    name: openvpn_getclient
+    state: absent
+- name: Get config files
+  fetch:
+    src: "{{ REMOTE_VOLUME_DIR }}/{{ item.name }}.ovpn"
+    dest: "{{ HOST_DIR_TOSAFE }}/{{ item.name }}.ovpn"
+  with_items: '{{ clientnames_details }}'

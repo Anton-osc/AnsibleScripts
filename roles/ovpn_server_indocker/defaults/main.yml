@@ -1,0 +1,6 @@
+---
+# defaults file for ovpn_server_indocker
+OVPN_DATA: "ovpn-data-server"
+files_details:
+   - { name: 'runer', source: 'runer.sh', destin: '/var/lib/docker/volumes/{{ OVPN_DATA }}/_data/runer.sh'}
+   - { name: 'ovpn__initpki', source: 'ovpn_initpki', destin: '/var/lib/docker/volumes/{{ OVPN_DATA }}/_data/ovpn_initpki'}

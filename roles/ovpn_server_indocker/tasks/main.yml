@@ -1,0 +1,52 @@
+---
+# tasks file for ovpn_server_indocker
+- name: Create docker volume 
+  docker_volume:
+    name: "{{  OVPN_DATA }}"
+
+- name: Copy custom files and scripts
+  copy:
+    src: "{{ item.source }}"
+    dest: "{{ item.destin }}"
+    mode: "0777"
+  with_items: '{{ files_details }}'
+    
+- name: Generate config file
+  docker_container:
+    name: datacontainer
+    image: kylemanna/openvpn
+    volumes:
+     - "{{ OVPN_DATA }}:/etc/openvpn"
+    command: "ovpn_genconfig -u udp://{{ ansible_ssh_host }}"
+
+- name: Delete container
+  docker_container:
+    name: datacontainer
+    state: absent
+
+- name: Init PKI OpenVPN
+  docker_container:
+    name: initializer
+    image: kylemanna/openvpn
+    volumes:
+     - "{{ OVPN_DATA }}:/etc/openvpn"
+    command: "./etc/openvpn/runer.sh"
+    detach: no
+    interactive: yes
+
+- name: Delete container
+  docker_container:
+    name: initializer
+    state: absent
+
+- name: Start OpenVPN server process container
+  docker_container:
+    name: openvpnserver
+    image: kylemanna/openvpn
+    volumes:
+     - "{{ OVPN_DATA }}:/etc/openvpn"
+    detach: yes
+    ports: 
+     - "1194:1194/udp"
+    capabilities:
+     - NET_ADMIN

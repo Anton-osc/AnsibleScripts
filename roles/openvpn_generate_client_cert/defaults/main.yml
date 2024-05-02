@@ -1,0 +1,9 @@
+---
+# defaults file for openvpn_generate_client_cert
+OVPN_DATA: ovpn-data-server
+CONTAINER_DIR: "/etc/openvpn"
+REMOTE_VOLUME_DIR: "/var/lib/docker/volumes/{{ OVPN_DATA }}/_data"
+HOST_DIR_TOSAFE: "~/ovpnFiles"
+clientnames_details:
+   - { name: 'phone' }
+   - { name: 'laptop' }
